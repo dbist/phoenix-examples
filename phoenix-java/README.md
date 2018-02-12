@@ -3,7 +3,7 @@
 `javac test.java`
 
 ##### Execute the class
-`java -cp "/tmp/apache-phoenix-5.0.0-alpha-HBase-2.0-bin/phoenix-5.0.0-alpha-HBase-2.0-client.jar:." test`
+`java -cp "$PHOENIX_HOME/phoenix-5.0.0-alpha-HBase-2.0-client.jar:." test`
 
 ##### Result should be
 ```
