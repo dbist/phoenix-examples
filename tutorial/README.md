@@ -26,6 +26,33 @@ DROP TABLE IF EXISTS USERS;
 CREATE TABLE IF NOT EXISTS USERS (id INTEGER PRIMARY KEY, firstname VARCHAR) SALT_BUCKETS=4;
 ```
 
+# demo exposing DATA_BLOCK_ENCODING via Phoenix API
+```
+DROP TABLE IF EXISTS TEST;
+CREATE TABLE TEST (MYKEY INTEGER PRIMARY KEY) DATA_BLOCK_ENCODING='FAST_DIFF';
+```
+
+# Phoenix doesn't have a way to expose extended table properties currently, use {{hbase shell}} instead
+```
+{NAME => '0', BLOOMFILTER => 'NONE', VERSIONS => '1', IN_MEMORY => 'false', KEEP_DELET
+ED_CELLS => 'FALSE', DATA_BLOCK_ENCODING => 'FAST_DIFF', TTL => 'FOREVER', COMPRESSION
+ => 'NONE', MIN_VERSIONS => '0', BLOCKCACHE => 'true', BLOCKSIZE => '65536', REPLICATI
+ON_SCOPE => '0'}
+```
+
+# Phoenix has a concept for Sequences when you'd like to increment monotonously increasing numbers
+```
+CREATE SCHEMA IF NOT EXISTS HITS;
+CREATE TABLE IF NOT EXISTS HITS.HITS (id INTEGER PRIMARY KEY) SALT_BUCKETS=4;
+CREATE SEQUENCE IF NOT EXISTS HITS.HIT_SEQUENCE START 1 INCREMENT BY 1 CACHE 10;
+```
+
+# now you can increment using the following statement
+```
+UPSERT INTO HITS.HITS(id) VALUES(NEXT VALUE FOR HITS.HIT_SEQUENCE;
+SELECT MAX(ID) FROM HITS.HITS;
+```            
+
 # Java example
 git clone https://github.com/dbist/phoenix-examples
 # edit the batch to smaller
