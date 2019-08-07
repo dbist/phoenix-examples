@@ -1,4 +1,6 @@
-# demo composite keys
+# Apache Phoenix intro
+
+demo composite keys
 ```
 DROP TABLE IF EXISTS TABLE1;
 CREATE TABLE TABLE1 (ID BIGINT NOT NULL, COL1 VARCHAR, COL2 VARCHAR CONSTRAINT PK PRIMARY KEY(ID, COL1));
@@ -6,7 +8,7 @@ UPSERT INTO TABLE1 (ID, COL1, COL2) VALUES (1, 'test_row_1', 'col2');
 UPSERT INTO TABLE1 (ID, COL1, COL2) VALUES (2, 'test_row_2', 'col2');
 ```
 
-# query the table
+query the table
 ```
 SELECT * FROM TABLE1;
 SELECT COUNT(*) FROM TABLE1;
@@ -14,25 +16,25 @@ SELECT COUNT(*) FROM TABLE1;
 !describe TABLE1
 ```
 
-# demo manual splits
+demo manual splits
 ```
 DROP TABLE IF EXISTS USERS;
 CREATE TABLE IF NOT EXISTS USERS (id INTEGER PRIMARY KEY, firstname VARCHAR) SPLIT ON ('A','J','M','R');
 ```
 
-# demo how Phoenix can handle splits with SALT_BUCKETS
+demo how Phoenix can handle splits with SALT_BUCKETS
 ```
 DROP TABLE IF EXISTS USERS;
 CREATE TABLE IF NOT EXISTS USERS (id INTEGER PRIMARY KEY, firstname VARCHAR) SALT_BUCKETS=4;
 ```
 
-# demo exposing DATA_BLOCK_ENCODING via Phoenix API
+demo exposing DATA_BLOCK_ENCODING via Phoenix API
 ```
 DROP TABLE IF EXISTS TEST;
 CREATE TABLE TEST (MYKEY INTEGER PRIMARY KEY) DATA_BLOCK_ENCODING='FAST_DIFF';
 ```
 
-# Phoenix doesn't have a way to expose extended table properties currently, use `hbase shell` instead
+Phoenix doesn't have a way to expose extended table properties currently, use `hbase shell` instead
 ```
 {NAME => '0', BLOOMFILTER => 'NONE', VERSIONS => '1', IN_MEMORY => 'false', KEEP_DELET
 ED_CELLS => 'FALSE', DATA_BLOCK_ENCODING => 'FAST_DIFF', TTL => 'FOREVER', COMPRESSION
@@ -40,29 +42,31 @@ ED_CELLS => 'FALSE', DATA_BLOCK_ENCODING => 'FAST_DIFF', TTL => 'FOREVER', COMPR
 ON_SCOPE => '0'}
 ```
 
-# Phoenix has a concept for Sequences when you'd like to increment monotonously increasing numbers
+Phoenix has a concept for Sequences when you'd like to increment monotonously increasing numbers
 ```
 CREATE SCHEMA IF NOT EXISTS HITS;
 CREATE TABLE IF NOT EXISTS HITS.HITS (id INTEGER PRIMARY KEY) SALT_BUCKETS=4;
 CREATE SEQUENCE IF NOT EXISTS HITS.HIT_SEQUENCE START 1 INCREMENT BY 1 CACHE 10;
 ```
 
-# now you can increment using the following statement
+now you can increment using the following statement
 ```
 UPSERT INTO HITS.HITS(id) VALUES(NEXT VALUE FOR HITS.HIT_SEQUENCE);
 SELECT MAX(ID) FROM HITS.HITS;
 ```            
 
-# Java example
+Java example
+```
 git clone https://github.com/dbist/phoenix-examples
-# edit the batch to smaller
+```
+modify the batch to smaller number
 ```
 cd phoenix-examples/phoenix-java/src/main/java
 javac LoadPhoenix.java
 java -cp "$PHOENIX_HOME/phoenix-4.14.2-HBase-1.4-client.jar:." LoadPhoenix
 ```
 
-# DEMO SKIP SKANS
+Skip Scans
 ```
 !tables
 SELECT COUNT(*) FROM JAVA;
@@ -73,12 +77,12 @@ WHERE ((MYKEY > 1 AND MYKEY <= 49999))
 AND MYKEY IN (10, 20, 99, 1111, 12000, 14000, 15000, 20000, 33333, 40000);
 ```
 
-# QueryServer
+QueryServer
 ```
 $PHOENIX_HOME/bin/queryserver.py start &
 ```
 
-# enter the following below
+enter the following below
 
 ```
 from typing import List, Dict
@@ -104,7 +108,7 @@ if __name__ == '__main__':
     json.dumps({'Users:': get_ids()})
 ```
 
-# in another terminal open hbase shell
+in another terminal open hbase shell
 
 `/opt/hbase/bin/hbase shell`
 
@@ -112,7 +116,7 @@ if __name__ == '__main__':
 
 `scan 'USERS'`
 
-# describe table in hbase shell to show significant benefits of Phoenix
+describe table in hbase shell to show significant benefits of Phoenix
 ```
 hbase(main):001:0> describe 'USERS'
 Table USERS is ENABLED
@@ -131,7 +135,7 @@ E', MIN_VERSIONS => '0', BLOCKCACHE => 'true', BLOCKSIZE => '65536', REPLICATION
 1 row(s) in 0.5100 seconds
 ```
 
-# open sqlline and browse the table
+open sqlline and browse the table
 
 `/opt/phoenix/bin/sqlline.py`
 
