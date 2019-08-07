@@ -32,7 +32,7 @@ DROP TABLE IF EXISTS TEST;
 CREATE TABLE TEST (MYKEY INTEGER PRIMARY KEY) DATA_BLOCK_ENCODING='FAST_DIFF';
 ```
 
-# Phoenix doesn't have a way to expose extended table properties currently, use {{hbase shell}} instead
+# Phoenix doesn't have a way to expose extended table properties currently, use __hbase shell__ instead
 ```
 {NAME => '0', BLOOMFILTER => 'NONE', VERSIONS => '1', IN_MEMORY => 'false', KEEP_DELET
 ED_CELLS => 'FALSE', DATA_BLOCK_ENCODING => 'FAST_DIFF', TTL => 'FOREVER', COMPRESSION
@@ -49,7 +49,7 @@ CREATE SEQUENCE IF NOT EXISTS HITS.HIT_SEQUENCE START 1 INCREMENT BY 1 CACHE 10;
 
 # now you can increment using the following statement
 ```
-UPSERT INTO HITS.HITS(id) VALUES(NEXT VALUE FOR HITS.HIT_SEQUENCE;
+UPSERT INTO HITS.HITS(id) VALUES(NEXT VALUE FOR HITS.HIT_SEQUENCE);
 SELECT MAX(ID) FROM HITS.HITS;
 ```            
 
