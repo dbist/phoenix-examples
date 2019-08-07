@@ -32,7 +32,7 @@ DROP TABLE IF EXISTS TEST;
 CREATE TABLE TEST (MYKEY INTEGER PRIMARY KEY) DATA_BLOCK_ENCODING='FAST_DIFF';
 ```
 
-# Phoenix doesn't have a way to expose extended table properties currently, use __hbase shell__ instead
+# Phoenix doesn't have a way to expose extended table properties currently, use `hbase shell` instead
 ```
 {NAME => '0', BLOOMFILTER => 'NONE', VERSIONS => '1', IN_MEMORY => 'false', KEEP_DELET
 ED_CELLS => 'FALSE', DATA_BLOCK_ENCODING => 'FAST_DIFF', TTL => 'FOREVER', COMPRESSION
