@@ -64,11 +64,43 @@ Java example
 ```
 git clone https://github.com/dbist/phoenix-examples
 ```
-modify the batch to smaller number
+if you get message
+```
+Exception in thread "main" org.apache.phoenix.exception.BatchUpdateExecution: ERROR 1106 (XCL06): Exception while executing batch.
+	at org.apache.phoenix.jdbc.PhoenixStatement.executeBatch(PhoenixStatement.java:1688)
+	at LoadPhoenix.main(LoadPhoenix.java:26)
+Caused by: java.sql.SQLException: ERROR 730 (LIM02): MutationState size is bigger than maximum allowed number of bytes, try upserting rows in smaller batches or using autocommit on for deletes.
+	at org.apache.phoenix.exception.SQLExceptionCode$Factory$1.newException(SQLExceptionCode.java:498)
+	at org.apache.phoenix.exception.SQLExceptionInfo.buildException(SQLExceptionInfo.java:150)
+	at org.apache.phoenix.execute.MutationState.throwIfTooBig(MutationState.java:382)
+	at org.apache.phoenix.execute.MutationState.join(MutationState.java:482)
+	at org.apache.phoenix.jdbc.PhoenixStatement$2.call(PhoenixStatement.java:411)
+	at org.apache.phoenix.jdbc.PhoenixStatement$2.call(PhoenixStatement.java:393)
+	at org.apache.phoenix.call.CallRunner.run(CallRunner.java:53)
+	at org.apache.phoenix.jdbc.PhoenixStatement.executeMutation(PhoenixStatement.java:392)
+	at org.apache.phoenix.jdbc.PhoenixStatement.executeMutation(PhoenixStatement.java:380)
+	at org.apache.phoenix.jdbc.PhoenixPreparedStatement.execute(PhoenixPreparedStatement.java:173)
+	at org.apache.phoenix.jdbc.PhoenixStatement.executeBatch(PhoenixStatement.java:1680)
+	... 1 more
+```
+modify the batch i.e. 500000 to smaller, like 200000
 ```
 cd phoenix-examples/phoenix-java/src/main/java
 javac LoadPhoenix.java
 java -cp "$PHOENIX_HOME/phoenix-4.14.2-HBase-1.4-client.jar:." LoadPhoenix
+```
+
+if you get message
+```
+Exception in thread "main" java.sql.SQLException: ERROR 726 (43M10):  Inconsistent namespace mapping properties. Cannot initiate connection as SYSTEM:CATALOG is found but client does not have phoenix.schema.isNamespaceMappingEnabled enabled
+	at org.apache.phoenix.exception.SQLExceptionCode$Factory$1.newException(SQLExceptionCode.java:498)
+	at org.apache.phoenix.exception.SQLExceptionInfo.buildException(SQLExceptionInfo.java:150)
+	at org.apache.phoenix.query.ConnectionQueryServicesImpl.ensureTableCreated(ConnectionQueryServicesImpl.java:1166)
+```
+
+copy `hbase-site.xml` from hbase conf directory to Java project directory
+```
+cp /opt/hbase/conf/hbase-site.xml phoenix-examples/phoenix-java/src/main/java
 ```
 
 Skip Scans
