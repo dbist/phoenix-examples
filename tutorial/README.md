@@ -109,10 +109,10 @@ cp /opt/hbase/conf/hbase-site.xml phoenix-examples/phoenix-java/src/main/java
 Skip Scans
 ```
 !tables
-SELECT COUNT(*) FROM JAVA;
-SELECT * FROM JAVA LIMIT 100;
+SELECT COUNT(*) FROM LARGETBL;
+SELECT * FROM LARGETBL LIMIT 100;
 
-SELECT * FROM JAVA
+SELECT * FROM LARGETBL
 WHERE ((MYKEY > 1 AND MYKEY <= 49999))
 AND MYKEY IN (10, 20, 99, 1111, 12000, 14000, 15000, 20000, 33333, 40000);
 ```
