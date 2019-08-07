@@ -1,4 +1,4 @@
-# Apache Phoenix intro
+# Apache Phoenix Intro
 
 demo composite keys
 ```
