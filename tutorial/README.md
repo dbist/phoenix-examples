@@ -139,10 +139,10 @@ open sqlline and browse the table
 
 `/opt/phoenix/bin/sqlline.py`
 
-# run SQL against the table
+run SQL against the table
 
 
-# start spark shell
+start spark shell
 ```
 $SPARK_HOME/bin/spark-shell \
     --master yarn \
@@ -155,7 +155,7 @@ $SPARK_HOME/bin/spark-shell \
     --driver-class-path $PHOENIX_HOME/phoenix-4.14.2-HBase-1.4-client.jar:/etc/hbase/conf
 ```
 
-# Load as a DataFrame using the Data Source API
+Load as a DataFrame using the Data Source API
 ```
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SQLContext
@@ -170,14 +170,14 @@ val df = sqlContext.load(
 df.filter(df("COL1") === "test_row_1" && df("ID") === 1L).select(df("ID")).show
 ```
 
-# sqlline.py  // show copying data from one table to another
+sqlline.py  // show copying data from one table to another
 ```
 CREATE TABLE IF NOT EXISTS INPUT_TABLE (id BIGINT NOT NULL PRIMARY KEY, col1 VARCHAR, col2 INTEGER);
 UPSERT INTO INPUT_TABLE (ID, COL1, COL2) VALUES (1, 'test_row_1', 100);
 CREATE TABLE IF NOT EXISTS OUTPUT_TABLE (id BIGINT NOT NULL PRIMARY KEY, col1 VARCHAR, col2 INTEGER);
 ```
 
-# Saving to Phoenix
+Saving to Phoenix
 ```
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
@@ -191,7 +191,6 @@ val df = sqlContext.load("org.apache.phoenix.spark", Map("table" -> "INPUT_TABLE
 // Save to OUTPUT_TABLE
 df.saveToPhoenix(Map("table" -> "OUTPUT_TABLE", "zkUrl" -> "localhost:2181"))
 ```
-
 
 
 Are there any tips for optimizing Phoenix?
