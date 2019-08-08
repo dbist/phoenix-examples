@@ -17,6 +17,13 @@ public class LoadPhoenix {
         int[] countWithoutException;
 
         try (Connection con = DriverManager.getConnection("jdbc:phoenix:localhost:2181:/hbase")) {
+            /**
+             * if you get message MutationState size is bigger than maximum allowed number of
+             * bytes, try upserting rows in smaller batches " +
+             * or using autocommit on for deletes. con.setAutoCommit(true) will make insertion
+             * drastically slower. Change RANGE to a smaller number instead.
+             */
+            con.setAutoCommit(false);
             stmt = con.createStatement();
 
             stmt.executeUpdate("create table if not exists LARGETBL (mykey integer "
