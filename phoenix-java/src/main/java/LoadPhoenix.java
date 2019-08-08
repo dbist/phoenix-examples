@@ -7,28 +7,29 @@ import java.util.UUID;
 
 public class LoadPhoenix {
 
+    private static final int RANGE = 500000;
+    private static final int BATCH = 10000;
+
     public static void main(String[] args) throws SQLException {
-        Statement stmt = null;
+        Statement stmt;
         ResultSet rset = null;
         int[] countWithoutException;
-        
-        Connection con = DriverManager.getConnection("jdbc:phoenix:hadoop.example.com:2181:/hbase");
-        
-        stmt = con.createStatement();
-        
-        stmt.executeUpdate("create table if not exists LARGETBL (mykey integer "
-                + "not null primary key, mycolumn varchar) salt_buckets = 10");
 
-        for (int i = 1; i <= 500000; i++) {
-            stmt.addBatch("upsert into LARGETBL values (" + i + ",'" + UUID.randomUUID().toString() + "')");
+        try (Connection con = DriverManager.getConnection("jdbc:phoenix:hadoop.example.com:2181:/hbase")) {
+            stmt = con.createStatement();
 
-            if ((i % 1000) == 0) {
-                countWithoutException = stmt.executeBatch();
-                System.out.printf("loaded: %d total: %d\n", countWithoutException.length, i);
+            stmt.executeUpdate("create table if not exists LARGETBL (mykey integer "
+                    + "not null primary key, mycolumn varchar) salt_buckets = 10");
+
+            for (int i = 1; i <= RANGE; i++) {
+                stmt.addBatch("upsert into LARGETBL values (" + i + ",'" + UUID.randomUUID().toString() + "')");
+
+                if ((i % BATCH) == 0) {
+                    countWithoutException = stmt.executeBatch();
+                    System.out.printf("loaded: %d total: %d\n", countWithoutException.length, i);
+                }
             }
+            con.commit();
         }
-
-        con.commit();
-        con.close();
     }
 }
