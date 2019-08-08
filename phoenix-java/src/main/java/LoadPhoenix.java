@@ -1,3 +1,4 @@
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,7 +16,7 @@ public class LoadPhoenix {
         ResultSet rset = null;
         int[] countWithoutException;
 
-        try (Connection con = DriverManager.getConnection("jdbc:phoenix:hadoop.example.com:2181:/hbase")) {
+        try (Connection con = DriverManager.getConnection("jdbc:phoenix:localhost:2181:/hbase")) {
             stmt = con.createStatement();
 
             stmt.executeUpdate("create table if not exists LARGETBL (mykey integer "
