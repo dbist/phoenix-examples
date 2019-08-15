@@ -67,7 +67,7 @@ git clone https://github.com/dbist/phoenix-examples
 ```
 cd phoenix-examples/phoenix-java/src/main/java
 javac LoadPhoenix.java
-java -cp "$PHOENIX_HOME/phoenix-4.14.2-HBase-1.4-client.jar:." LoadPhoenix
+java -cp "$PHOENIX_HOME/phoenix-*-HBase-*-client.jar:." LoadPhoenix
 ```
 
 if you get message
@@ -192,7 +192,7 @@ $SPARK_HOME/bin/spark-shell \
     --executor-cores 1 \
     --queue default \
     --jars $PHOENIX_HOME/*.jar \
-    --driver-class-path $PHOENIX_HOME/phoenix-4.14.2-HBase-1.4-client.jar:/etc/hbase/conf
+    --driver-class-path $PHOENIX_HOME/phoenix-*-HBase-*-client.jar:/etc/hbase/conf
 ```
 
 Load as a DataFrame using the Data Source API
@@ -212,9 +212,7 @@ df.filter(df("COL1") === "test_row_1" && df("ID") === 1L).select(df("ID")).show
 
 sqlline.py  // show copying data from one table to another
 ```
-CREATE TABLE IF NOT EXISTS INPUT_TABLE (id BIGINT NOT NULL PRIMARY KEY, col1 VARCHAR, col2 INTEGER);
-UPSERT INTO INPUT_TABLE (ID, COL1, COL2) VALUES (1, 'test_row_1', 100);
-CREATE TABLE IF NOT EXISTS OUTPUT_TABLE (id BIGINT NOT NULL PRIMARY KEY, col1 VARCHAR, col2 INTEGER);
+CREATE TABLE IF NOT EXISTS OUTPUTTBL (MYKEY INTEGER NOT NULL PRIMARY KEY, MYCOLUMN VARCHAR) SALT_BUCKETS = 10;
 ```
 
 Saving to Phoenix
@@ -223,13 +221,18 @@ import org.apache.spark.SparkContext
 import org.apache.spark.sql._
 import org.apache.phoenix.spark._
 
-// Load INPUT_TABLE
+// Load Source Table
 val sqlContext = new SQLContext(sc)
-val df = sqlContext.load("org.apache.phoenix.spark", Map("table" -> "INPUT_TABLE",
+val df = sqlContext.load("org.apache.phoenix.spark", Map("table" -> "LARGETBL",
   "zkUrl" -> "localhost:2181"))
 
-// Save to OUTPUT_TABLE
-df.saveToPhoenix(Map("table" -> "OUTPUT_TABLE", "zkUrl" -> "localhost:2181"))
+// Save to Output Table
+df.saveToPhoenix(Map("table" -> "OUTPUTTBL", "zkUrl" -> "localhost:2181"))
+```
+
+Query the Output Table
+```
+SELECT COUNT(*) FROM OUTPUTTBL;
 ```
 
 
