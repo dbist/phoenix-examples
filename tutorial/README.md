@@ -67,7 +67,7 @@ git clone https://github.com/dbist/phoenix-examples
 ```
 cd phoenix-examples/phoenix-java/src/main/java
 javac LoadPhoenix.java
-java -cp "$PHOENIX_HOME/phoenix-*-HBase-*-client.jar:." LoadPhoenix
+java -cp "$PHOENIX_HOME/phoenix-4.14.3-HBase-1.4-client.jar:." LoadPhoenix
 ```
 
 if you get message
