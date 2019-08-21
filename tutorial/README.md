@@ -237,6 +237,7 @@ SELECT COUNT(*) FROM OUTPUTTBL;
 
 Bulk Load, data generated with Mockaroo, for `id`, used Mockaroo fx `random(10000, 99999)`
 Follow the bulk load example in the following [link](https://phoenix.apache.org/bulk_dataload.html).
+* Note: import file cannot have a header.
 ```
 hdfs dfs -put data.csv .
 ```
