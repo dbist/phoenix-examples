@@ -235,6 +235,22 @@ Query the Output Table
 SELECT COUNT(*) FROM OUTPUTTBL;
 ```
 
+Bulk Load, data generated with Mockaroo, for `id`, used Mockaroo fx `random(10000, 99999)`
+Follow the bulk load example in the following [link](https://phoenix.apache.org/bulk_dataload.html).
+```
+hdfs dfs -put data.csv .
+```
+
+```
+ CREATE TABLE example (
+    my_pk bigint not null,
+    m.first_name varchar(50),
+    m.last_name varchar(50) 
+    CONSTRAINT pk PRIMARY KEY (my_pk))
+```
+```
+HADOOP_CLASSPATH=/opt/hbase/hbase-1.4.10/lib/hbase-protocol-1.4.10.jar:/opt/hbase/hbase-1.4.10/conf hadoop jar /opt/phoenix/apache-phoenix-4.14.2-HBase-1.4-bin/phoenix-4.14.2-HBase-1.4-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool --table EXAMPLE --input data.csv
+```
 
 Are there any tips for optimizing Phoenix?
 Use Salting to increase read/write performance Salting can significantly increase read/write performance by pre-splitting the data into multiple regions. Although Salting will yield better performance in most scenarios.
