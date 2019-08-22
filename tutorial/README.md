@@ -237,6 +237,8 @@ SELECT COUNT(*) FROM OUTPUTTBL;
 
 Bulk Load, data generated with Mockaroo, for `id`, used Mockaroo fx `random(10000, 99999)`
 Follow the bulk load example in the following [link](https://phoenix.apache.org/bulk_dataload.html).
+Data can be in csv format or gzip the csvs. Example below demonstrates csv in gzip format.
+
 * Note: import file cannot have a header.
 ```
 hdfs dfs -put data.csv.gz .
@@ -252,6 +254,22 @@ hdfs dfs -put data.csv.gz .
 ```
 HADOOP_CLASSPATH=/opt/hbase/hbase-1.4.10/lib/hbase-protocol-1.4.10.jar:/opt/hbase/hbase-1.4.10/conf hadoop jar /opt/phoenix/apache-phoenix-4.14.3-HBase-1.4-bin/phoenix-4.14.3-HBase-1.4-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool --table EXAMPLE --input data.csv.gz
 ```
+Data can also be in a Hadoop Archive (HAR)
+```
+hdfs dfs -mkdir data
+hdfs dfs -put data.csv data/
+hadoop archive -archiveName data.har -p /user/vagrant/data /user/vagrant/archive
+hdfs dfs -ls har:///user/vagrant/archive/data.har
+```
+```
+Found 1 items
+-rw-r--r--   3 vagrant hdfs      20907 2019-08-22 17:58 har:///user/vagrant/archive/data.har/data.csv
+```
+
+```
+HADOOP_CLASSPATH=/opt/hbase/hbase-1.4.10/lib/hbase-protocol-1.4.10.jar:/opt/hbase/hbase-1.4.10/conf hadoop jar /opt/phoenix/apache-phoenix-4.14.3-HBase-1.4-bin/phoenix-4.14.3-HBase-1.4-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool --table EXAMPLE --input har:///user/vagrant/archive/data.har
+```
+
 
 Load table while populating index
 ```
