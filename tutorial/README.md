@@ -239,7 +239,7 @@ Bulk Load, data generated with Mockaroo, for `id`, used Mockaroo fx `random(1000
 Follow the bulk load example in the following [link](https://phoenix.apache.org/bulk_dataload.html).
 * Note: import file cannot have a header.
 ```
-hdfs dfs -put data.csv .
+hdfs dfs -put data.csv.gz .
 ```
 
 ```
@@ -247,10 +247,10 @@ hdfs dfs -put data.csv .
     my_pk bigint not null,
     m.first_name varchar(50),
     m.last_name varchar(50) 
-    CONSTRAINT pk PRIMARY KEY (my_pk))
+    CONSTRAINT pk PRIMARY KEY (my_pk));
 ```
 ```
-HADOOP_CLASSPATH=/opt/hbase/hbase-1.4.10/lib/hbase-protocol-1.4.10.jar:/opt/hbase/hbase-1.4.10/conf hadoop jar /opt/phoenix/apache-phoenix-4.14.2-HBase-1.4-bin/phoenix-4.14.2-HBase-1.4-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool --table EXAMPLE --input data.csv
+HADOOP_CLASSPATH=/opt/hbase/hbase-1.4.10/lib/hbase-protocol-1.4.10.jar:/opt/hbase/hbase-1.4.10/conf hadoop jar /opt/phoenix/apache-phoenix-4.14.3-HBase-1.4-bin/phoenix-4.14.3-HBase-1.4-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool --table EXAMPLE --input data.csv.gz
 ```
 
 Load table while populating index
