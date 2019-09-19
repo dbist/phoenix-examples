@@ -60,6 +60,36 @@ SELECT MAX(ID) FROM HITS.HITS;
 
 ```            
 
+Demo mapping an existing HBase schema to Phoenix schema, hint, just use the same name
+```
+hbase shell> create_namespace 'ns'
+```
+```
+phoenix sqlline> CREATE SCHEMA NS;
+phoenix sqlline> CREATE TABLE IF NOT EXISTS NS.HITS (id INTEGER PRIMARY KEY) SALT_BUCKETS=4;
+```
+
+Demo mapping an hbase non-default namespace table to Phoenix schema
+```
+hbase shell> create 'NS:T3', {NAME => 'F2', VERSIONS => 5}
+```
+
+```
+sqlline> CREATE VIEW NS.T3 (pk VARCHAR PRIMARY KEY, "F2".val VARCHAR );
+```
+
+mapping an existing HBase table in an existing namespace to a new Phoenix schema with a Phoenix view
+
+```
+hbase shell> create_namespace 'ns3'
+hbase shell> create 'ns3:t1', { NAME => 'cf', VERSIONS => 5}
+```
+
+```
+sqlline> CREATE SCHEMA "ns3";
+sqlline> CREATE VIEW "ns3"."t1" (pk VARCHAR PRIMARY KEY, "cf".val VARCHAR );
+```
+
 Java example
 ```
 git clone https://github.com/dbist/phoenix-examples
@@ -269,7 +299,6 @@ Found 1 items
 ```
 HADOOP_CLASSPATH=/opt/hbase/hbase-1.4.10/lib/hbase-protocol-1.4.10.jar:/opt/hbase/hbase-1.4.10/conf hadoop jar /opt/phoenix/apache-phoenix-4.14.3-HBase-1.4-bin/phoenix-4.14.3-HBase-1.4-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool --table EXAMPLE --input har:///user/vagrant/archive/data.har
 ```
-
 
 Load table while populating index
 ```
