@@ -12,7 +12,7 @@
         <phoenix.version>4.8.0-HBase-1.2</phoenix.version>
         <hbase.version>1.2.1</hbase.version>
         <hadoop.version>2.7.1</hadoop.version>
-        <spark.version>1.6.2</spark.version>
+        <spark.version>2.2.3</spark.version>
         <lombok.version>1.16.8</lombok.version>
         <java.version>1.8</java.version>
     </properties>
